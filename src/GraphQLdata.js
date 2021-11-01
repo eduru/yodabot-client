@@ -1,5 +1,5 @@
 export const GRAPHQL_API =
-  "https://inbenta-graphql-swapi-prod.herokuapp.com/graphiql";
+  "https://inbenta-graphql-swapi-prod.herokuapp.com/api";
 
 export const GET_FILMS_QUERY = `{
   allFilms(first: 6) {

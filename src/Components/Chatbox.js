@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useSendMessage from "../CustomHooks/useSendMessage";
+import useSwapi from "../CustomHooks/useSwapi";
 
 const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
   const [userMessage, setUserMessage] = useState("");
+  const { characters, films } = useSwapi();
   const { getAnswer, yodaAnswer, loadingAnswer } = useSendMessage(
     accessToken,
     chatBotUrl,
@@ -10,7 +12,19 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
     userMessage
   );
   const [chat, setChat] = useState([]);
+  const [count, setCount] = useState(0);
+
+  function detectWord(word, str) {
+    return RegExp("\\b" + word + "\\b").test(str.toLowerCase());
+  }
+
   const sendMessage = () => {
+    if (detectWord("force", userMessage)) {
+      const str = `This is a list of Star Wars movies:`;
+      const movies = films.join(",");
+      setChat((list) => [...list, userMessage]);
+      return setChat((list) => [...list, str + movies]);
+    }
     setChat((list) => [...list, userMessage]);
     getAnswer();
     setChat((list) => [...list, yodaAnswer]);
