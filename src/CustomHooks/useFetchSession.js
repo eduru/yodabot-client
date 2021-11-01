@@ -5,13 +5,13 @@ import axios from "axios";
 const useFetchSession = (accessToken, chatBotUrl, toggleChat) => {
   const [sessionToken, setSessionToken] = useState();
   const [loadingSession, setLoadingSession] = useState(false);
-  const getSessionToken = async (x, y) => {
+  const getSessionToken = async (token, url) => {
     try {
       const res = await axios.post(
         "http://localhost:4000/yodabot/conversation",
         {
-          token: `Bearer ${x}`,
-          baseUrl: y,
+          token: `Bearer ${token}`,
+          baseUrl: url,
         }
       );
       setSessionToken(res.data.sessionToken);

@@ -6,6 +6,7 @@ const useSendMessage = (accessToken, chatBotUrl, sessionToken, userMessage) => {
   const [loadingAnswer, setLoadingAnswer] = useState(false);
 
   const getAnswer = async () => {
+    console.log("he");
     setLoadingAnswer(true);
     try {
       const res = await axios.post(
@@ -17,6 +18,7 @@ const useSendMessage = (accessToken, chatBotUrl, sessionToken, userMessage) => {
           message: "",
         }
       );
+      console.log(res.data[0].message);
       setYodaAnswer(res.data[0].message);
     } catch (e) {
       console.log(e);

@@ -3,13 +3,17 @@ import useSendMessage from "../CustomHooks/useSendMessage";
 
 const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
   const [userMessage, setUserMessage] = useState("");
-  const { getAnswer, loadingAnswer } = useSendMessage(
+  const { getAnswer, yodaAnswer, loadingAnswer } = useSendMessage(
     accessToken,
     chatBotUrl,
-    userMessage
+    sessionToken
   );
   const [chat, setChat] = useState([]);
-
+  const sendMessage = async () => {
+    setChat((list) => [...list, userMessage]);
+    await getAnswer();
+    setChat((list) => [...list, yodaAnswer]);
+  };
   return (
     <div className="Chatbox">
       <div className="Chat-container">
@@ -18,7 +22,7 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
         ))}
       </div>
       <input type="text" onChange={(e) => setUserMessage(e.target.value)} />
-      <button>TEST SEND MESSAGE</button>
+      <button onClick={sendMessage}>TEST SEND MESSAGE</button>
     </div>
   );
 };
