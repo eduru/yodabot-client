@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSendMessage from "../CustomHooks/useSendMessage";
 import useSwapi from "../CustomHooks/useSwapi";
 import ScrollToBottom from "react-scroll-to-bottom";
@@ -13,6 +13,7 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
     userMessage
   );
   const [chat, setChat] = useState([]);
+
   const [count, setCount] = useState(0);
 
   function detectWord(word, str) {
@@ -21,15 +22,37 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
 
   const sendMessage = () => {
     if (detectWord("force", userMessage)) {
-      const str = `This is a list of Star Wars movies:`;
+      const str = `This is a list of Star Wars movies: `;
       const movies = films.join(",");
       setChat((list) => [...list, userMessage]);
       return setChat((list) => [...list, str + movies]);
     }
-    setChat((list) => [...list, `You: ${userMessage}`]);
+    setChat((list) => [...list, `You: ${userMessage}.`]);
     getAnswer();
+
+    // if (detectWord("sorry", yodaAnswer)) {
+    //   const str = `This is a list of Star Wars characters:`;
+    //   const people = characters.join(",");
+    //   setChat((list) => [...list, userMessage]);
+    //   return setChat((list) => [...list, str + people]);
+    // }
+    if (yodaAnswer === undefined) {
+      return setChat((list) => [
+        ...list,
+        "Yoda: Always pass on what you have learned. What would you like to know?",
+      ]);
+    }
     setChat((list) => [...list, `Yoda: ${yodaAnswer}`]);
   };
+
+  useEffect(() => {
+    const chatHistory = window.localStorage.getItem("chat-history");
+    setChat((list) => [...list, ...JSON.parse(chatHistory)]);
+    console.log(JSON.parse(chatHistory));
+  }, []);
+  useEffect(() => {
+    window.localStorage.setItem("chat-history", JSON.stringify(chat));
+  });
 
   return (
     <div className="chat-window">
@@ -47,7 +70,7 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
       </div>
       <div className="chat-footer">
         <input type="text" onChange={(e) => setUserMessage(e.target.value)} />
-        <button onClick={sendMessage}>SEND </button>
+        <button onClick={sendMessage}>SEND</button>
       </div>
     </div>
   );

@@ -82,6 +82,12 @@
   word-break: break-word;
   font-size: 0.75em;
 }
+.message:nth-child(even) {
+  background-color: #3dae3c7e;
+}
+.message:nth-child(odd) {
+  background-color: #478bd36f;
+}
 
 .chat-window .chat-footer {
   height: 40px;

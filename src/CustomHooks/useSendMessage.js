@@ -25,7 +25,6 @@ const useSendMessage = (accessToken, chatBotUrl, sessionToken, userMessage) => {
       setLoadingAnswer(false);
     }
   };
-  //console.log(yodaAnswer);
   return { getAnswer, yodaAnswer, loadingAnswer };
 };
 
