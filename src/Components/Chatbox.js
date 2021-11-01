@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useSendMessage from "../CustomHooks/useSendMessage";
 import useSwapi from "../CustomHooks/useSwapi";
+import ScrollToBottom from "react-scroll-to-bottom";
 
 const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
   const [userMessage, setUserMessage] = useState("");
@@ -25,21 +26,29 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
       setChat((list) => [...list, userMessage]);
       return setChat((list) => [...list, str + movies]);
     }
-    setChat((list) => [...list, userMessage]);
+    setChat((list) => [...list, `You: ${userMessage}`]);
     getAnswer();
-    setChat((list) => [...list, yodaAnswer]);
+    setChat((list) => [...list, `Yoda: ${yodaAnswer}`]);
   };
 
   return (
-    <div className="Chatbox">
-      <p>{loadingAnswer ? "writing ..." : ""}</p>
-      <div className="Chat-container">
-        {chat.map((m, i) => (
-          <div key={i}>{m}</div>
-        ))}
+    <div className="chat-window">
+      <div className="chat-header">
+        <p>{loadingAnswer ? "writing ..." : "Yoda Chat"}</p>
       </div>
-      <input type="text" onChange={(e) => setUserMessage(e.target.value)} />
-      <button onClick={sendMessage}>SEND MESSAGE</button>
+      <div className="chat-body">
+        <ScrollToBottom className="message-container">
+          {chat.map((message, i) => (
+            <div className="message" key={i}>
+              <div className="message-content">{message}</div>
+            </div>
+          ))}
+        </ScrollToBottom>
+      </div>
+      <div className="chat-footer">
+        <input type="text" onChange={(e) => setUserMessage(e.target.value)} />
+        <button onClick={sendMessage}>SEND </button>
+      </div>
     </div>
   );
 };
