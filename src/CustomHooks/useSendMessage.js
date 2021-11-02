@@ -9,7 +9,7 @@ const useSendMessage = (accessToken, chatBotUrl, sessionToken, userMessage) => {
     setLoadingAnswer(true);
     try {
       const res = await axios.post(
-        "http://localhost:4000/yodabot/conversation/message",
+        "https://yodabot-server-prod.herokuapp.com/yodabot/conversation/message",
         {
           token: `Bearer ${accessToken}`,
           baseUrl: chatBotUrl,

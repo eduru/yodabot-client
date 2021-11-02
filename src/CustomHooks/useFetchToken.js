@@ -9,7 +9,9 @@ const useFetchToken = () => {
 
   const getToken = async () => {
     try {
-      const res = await axios.post("http://localhost:4000/yodabot/auth");
+      const res = await axios.post(
+        "https://yodabot-server-prod.herokuapp.com/yodabot/auth"
+      );
       setAccessToken(res.data.accessToken);
       setChatBotUrl(res.data.apis.chatbot);
     } catch (e) {

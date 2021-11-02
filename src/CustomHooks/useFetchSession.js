@@ -8,7 +8,7 @@ const useFetchSession = (accessToken, chatBotUrl, toggleChat) => {
   const getSessionToken = async (token, url) => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/yodabot/conversation",
+        "https://yodabot-server-prod.herokuapp.com/yodabot/conversation",
         {
           token: `Bearer ${token}`,
           baseUrl: url,
