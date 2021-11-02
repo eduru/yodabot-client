@@ -7,7 +7,12 @@ const useHandleChange = () => {
     setInputValue(e.target.value);
     setUserMessage(e.target.value);
   };
-  return { handleChange, inputValue, setInputValue, userMessage };
+  return {
+    handleChange,
+    inputValue,
+    setInputValue,
+    userMessage,
+  };
 };
 
 export default useHandleChange;

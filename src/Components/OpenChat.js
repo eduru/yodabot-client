@@ -32,13 +32,6 @@ const OpenChat = ({ accessToken, chatBotUrl }) => {
           sessionToken={sessionToken}
           loadingSession={loadingSession}
         />
-        <button
-          onClick={() => {
-            setToggleChat(!toggleChat);
-          }}
-        >
-          New conversation
-        </button>
       </div>
     );
   }

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import useSendMessage from "../CustomHooks/useSendMessage";
-import useSwapi from "../CustomHooks/useSwapi";
 import ScrollToBottom from "react-scroll-to-bottom";
+import useSwapi from "../CustomHooks/useSwapi";
+import DetectWord from "../Helpers/DetectWord";
+import useSendMessage from "../CustomHooks/useSendMessage";
 import useHandleChange from "../CustomHooks/useHandleChange";
-import DetectWord from "../CustomHooks/DetectWord";
 
-const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
+const Chatbox = ({ accessToken, chatBotUrl, sessionToken }) => {
   const { handleChange, inputValue, setInputValue, userMessage } =
     useHandleChange();
   const { characters, films } = useSwapi();
@@ -16,9 +16,7 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
     userMessage
   );
   const [chat, setChat] = useState([]);
-
-  const [count, setCount] = useState(0);
-
+  const [count, setCount] = useState(1);
   const sendMessage = () => {
     setInputValue("");
     if (DetectWord("force", userMessage)) {
@@ -30,12 +28,16 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
     setChat((list) => [...list, `You: ${userMessage}.`]);
     getAnswer();
 
-    // if (DetectWord("sorry", yodaAnswer)) {
-    //   const str = `This is a list of Star Wars characters:`;
-    //   const people = characters.join(",");
-    //   setChat((list) => [...list, userMessage]);
-    //   return setChat((list) => [...list, str + people]);
-    // }
+    if (DetectWord("sorry", yodaAnswer)) {
+      if (count === 2) {
+        setCount(1);
+        const str = `This is a list of Star Wars characters:`;
+        const people = characters.join(",");
+        setChat((list) => [...list, userMessage]);
+        return setChat((list) => [...list, str + people]);
+      }
+      setCount(count + 1);
+    }
     if (yodaAnswer === undefined) {
       return setChat((list) => [
         ...list,
@@ -44,21 +46,19 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
     }
     setChat((list) => [...list, `Yoda: ${yodaAnswer}`]);
   };
+  useEffect(() => {
+    const chatHistory = window.localStorage.getItem("chat-history");
+    setChat((list) => [...list, ...JSON.parse(chatHistory)]);
+    console.log(JSON.parse(chatHistory));
+  }, []);
+  useEffect(() => {
+    window.localStorage.setItem("chat-history", JSON.stringify(chat));
+  });
 
-  // useEffect(() => {
-  //   const chatHistory = window.localStorage.getItem("chat-history");
-  //   setChat((list) => [...list, ...JSON.parse(chatHistory)]);
-  //   console.log(JSON.parse(chatHistory));
-  // }, []);
-  // useEffect(() => {
-  //   window.localStorage.setItem("chat-history", JSON.stringify(chat));
-  // });
-
-  // const handleChange = (e) => {
-  //   setInputValue(e.target.value);
-  //   setUserMessage(e.target.value);
-  // };
-
+  const sendToChat = () => {
+    setInputValue("");
+    sendMessage();
+  };
   return (
     <div className="chat-window">
       <div className="chat-header">
@@ -75,8 +75,9 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
       </div>
       <div className="chat-footer">
         <input type="text" value={inputValue} onChange={handleChange} />
-        <button onClick={sendMessage}>SEND</button>
+        <button onClick={sendToChat}>SEND</button>
       </div>
+      <button onClick={() => setChat([])}>New conversation</button>
     </div>
   );
 };
