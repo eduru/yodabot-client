@@ -41,8 +41,8 @@
 }
 
 .chat-window .chat-body {
-  height: 700px;
-  /* height:calc(450px - (45px + 70px)); */
+  height: 500px;
+  /* height: calc(450px - (45px + 70px)); */
   border: 1px solid #263238;
   background: #fff;
 

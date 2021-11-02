@@ -15,7 +15,8 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken }) => {
     sessionToken,
     userMessage
   );
-  const [chat, setChat] = useState([]);
+  const chatHistory = window.localStorage.getItem("chat-history");
+  const [chat, setChat] = useState([...JSON.parse(chatHistory)]);
   const [count, setCount] = useState(1);
   const sendMessage = () => {
     setInputValue("");
@@ -46,11 +47,7 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken }) => {
     }
     setChat((list) => [...list, `Yoda: ${yodaAnswer}`]);
   };
-  useEffect(() => {
-    const chatHistory = window.localStorage.getItem("chat-history");
-    setChat((list) => [...list, ...JSON.parse(chatHistory)]);
-    console.log(JSON.parse(chatHistory));
-  }, []);
+
   useEffect(() => {
     window.localStorage.setItem("chat-history", JSON.stringify(chat));
   });
@@ -59,6 +56,7 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken }) => {
     setInputValue("");
     sendMessage();
   };
+
   return (
     <div className="chat-window">
       <div className="chat-header">
