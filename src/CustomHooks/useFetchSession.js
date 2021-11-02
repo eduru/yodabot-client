@@ -15,7 +15,6 @@ const useFetchSession = (accessToken, chatBotUrl, toggleChat) => {
         }
       );
       setSessionToken(res.data.sessionToken);
-      console.log("SessionToken: ", sessionToken);
     } catch (e) {
       console.log(e);
     } finally {

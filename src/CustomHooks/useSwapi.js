@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import * as GQLData from "../GraphQLdata";
 
@@ -26,11 +26,11 @@ const useSwapi = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCharacters();
-    fetchFilms();
-  }, []);
-  return { characters, films };
+  // useEffect(() => {
+  //   fetchCharacters();
+  //   fetchFilms();
+  // }, []);
+  return { fetchCharacters, fetchFilms, characters, films };
 };
 
 export default useSwapi;

@@ -8,7 +8,7 @@ import useHandleChange from "../CustomHooks/useHandleChange";
 const Chatbox = ({ accessToken, chatBotUrl, sessionToken }) => {
   const { handleChange, inputValue, setInputValue, userMessage } =
     useHandleChange();
-  const { characters, films } = useSwapi();
+  const { fetchCharacters, fetchFilms, characters, films } = useSwapi();
   const { getAnswer, yodaAnswer, loadingAnswer } = useSendMessage(
     accessToken,
     chatBotUrl,
@@ -16,9 +16,12 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken }) => {
     userMessage
   );
   const chatHistory = window.localStorage.getItem("chat-history");
-  const [chat, setChat] = useState([...JSON.parse(chatHistory)]);
+  const chatArray = JSON.parse(chatHistory);
+  const [chat, setChat] = useState([...chatArray]);
   const [count, setCount] = useState(1);
   const sendMessage = () => {
+    fetchCharacters();
+    fetchFilms();
     setInputValue("");
     if (DetectWord("force", userMessage)) {
       const str = `This is a list of Star Wars movies: `;
