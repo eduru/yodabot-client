@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import useSendMessage from "../CustomHooks/useSendMessage";
 import useSwapi from "../CustomHooks/useSwapi";
 import ScrollToBottom from "react-scroll-to-bottom";
+import useHandleChange from "../CustomHooks/useHandleChange";
+import DetectWord from "../CustomHooks/DetectWord";
 
 const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
-  const [userMessage, setUserMessage] = useState("");
+  const { handleChange, inputValue, setInputValue, userMessage } =
+    useHandleChange();
   const { characters, films } = useSwapi();
   const { getAnswer, yodaAnswer, loadingAnswer } = useSendMessage(
     accessToken,
@@ -16,12 +19,9 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
 
   const [count, setCount] = useState(0);
 
-  function detectWord(word, str) {
-    return RegExp("\\b" + word + "\\b").test(str.toLowerCase());
-  }
-
   const sendMessage = () => {
-    if (detectWord("force", userMessage)) {
+    setInputValue("");
+    if (DetectWord("force", userMessage)) {
       const str = `This is a list of Star Wars movies: `;
       const movies = films.join(",");
       setChat((list) => [...list, userMessage]);
@@ -30,7 +30,7 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
     setChat((list) => [...list, `You: ${userMessage}.`]);
     getAnswer();
 
-    // if (detectWord("sorry", yodaAnswer)) {
+    // if (DetectWord("sorry", yodaAnswer)) {
     //   const str = `This is a list of Star Wars characters:`;
     //   const people = characters.join(",");
     //   setChat((list) => [...list, userMessage]);
@@ -45,14 +45,19 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
     setChat((list) => [...list, `Yoda: ${yodaAnswer}`]);
   };
 
-  useEffect(() => {
-    const chatHistory = window.localStorage.getItem("chat-history");
-    setChat((list) => [...list, ...JSON.parse(chatHistory)]);
-    console.log(JSON.parse(chatHistory));
-  }, []);
-  useEffect(() => {
-    window.localStorage.setItem("chat-history", JSON.stringify(chat));
-  });
+  // useEffect(() => {
+  //   const chatHistory = window.localStorage.getItem("chat-history");
+  //   setChat((list) => [...list, ...JSON.parse(chatHistory)]);
+  //   console.log(JSON.parse(chatHistory));
+  // }, []);
+  // useEffect(() => {
+  //   window.localStorage.setItem("chat-history", JSON.stringify(chat));
+  // });
+
+  // const handleChange = (e) => {
+  //   setInputValue(e.target.value);
+  //   setUserMessage(e.target.value);
+  // };
 
   return (
     <div className="chat-window">
@@ -69,7 +74,7 @@ const Chatbox = ({ accessToken, chatBotUrl, sessionToken, loadingSession }) => {
         </ScrollToBottom>
       </div>
       <div className="chat-footer">
-        <input type="text" onChange={(e) => setUserMessage(e.target.value)} />
+        <input type="text" value={inputValue} onChange={handleChange} />
         <button onClick={sendMessage}>SEND</button>
       </div>
     </div>
